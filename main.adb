@@ -12,9 +12,9 @@ procedure Main is
    n : Long_Long_Integer;
    e : Long_Long_Integer;
    d : Long_Long_Integer;
-   message : Ada.Strings.Unbounded.Unbounded_String;
-   encryptedMessageArr : Array (1 .. 100) of Integer;
-   decryptedMessageArr : Array (1 .. 100) of Integer;
+   message : Long_Long_Integer;
+   encryptedMessage : Long_Long_Integer;
+   decryptedMessage : Long_Long_Integer;
 
    -------------------
    -- IsPrimeNumber --
@@ -165,7 +165,7 @@ begin
    p := Long_Long_Integer'Value(Ada.Command_Line.Argument(1));
    q := Long_Long_Integer'Value(Ada.Command_Line.Argument(2));
    e := Long_Long_Integer'Value(Ada.Command_Line.Argument(3));
-   message := Ada.Strings.Unbounded.To_Unbounded_String(Ada.Command_Line.Argument(4));
+   message := Long_Long_Integer'Value(Ada.Command_Line.Argument(4));
 
    if not (IsPrimeNumber(p) and IsPrimeNumber(q)) then
       Ada.Text_IO.Put_Line("p and q has to be prime numbers.");
@@ -173,8 +173,13 @@ begin
    end if;
 
    n := p * q;
-   phi := (p - 1) * (q - 1);
 
+   if message >= n - 1 then 
+      Ada.Text_IO.Put_Line("The message has to be smaller than n");
+      return;
+   end if;
+
+   phi := (p - 1) * (q - 1);
 
    if not (IsOdd(e) and (gcd(e, phi) = 1) and e > 1) then
       Ada.Text_IO.Put_Line("e has to be 1 < e < λ(n) and gcd(e, λ(n)) = 1");
@@ -183,13 +188,9 @@ begin
 
    d := GetPrivateExponent(phi, e);
 
-   for I in 1 .. Ada.Strings.Unbounded.Length(message) loop
-      encryptedMessageArr(I) := Integer(Encrypt(Character'Pos(Ada.Strings.Unbounded.Element(message, I)), n, e));
-   end loop;
+   encryptedMessage := Encrypt(message, n, e);
 
-   for I in 1 .. Ada.Strings.Unbounded.Length(message) loop
-      decryptedMessageArr(I) := Integer(Decrypt(Long_Long_Integer(encryptedMessageArr(I)), d, n));
-   end loop;
+   decryptedMessage := Decrypt(encryptedMessage, d, n);
 
    Ada.Text_IO.Put("p =");
    Ada.Text_IO.Put_Line(Long_Long_Integer'Image(p));
@@ -210,27 +211,13 @@ begin
    Ada.Text_IO.Put_Line(Long_Long_Integer'Image(d));
 
    Ada.Text_IO.Put("message = ");
+   Ada.Text_IO.Put_Line(Long_Long_Integer'Image(message));
 
-   for I in 1 .. Ada.Strings.Unbounded.Length(message) loop
-      Ada.Text_IO.Put(Ada.Strings.Unbounded.Element(message, I));
-   end loop;
-
-   Ada.Text_IO.New_Line;
    Ada.Text_IO.Put("encrypted message = ");
-   for I in 1 .. Ada.Strings.Unbounded.Length(message) loop
-      -- To remove ASCII values below 33.
-      if (encryptedMessageArr(I) mod 127) < 33 then
-         Ada.Text_IO.Put(Character'Val((encryptedMessageArr(I) mod 127) + 33));
-      else
-         Ada.Text_IO.Put(Character'Val(encryptedMessageArr(I) mod 127));
-      end if;
-   end loop;
+   Ada.Text_IO.Put_Line(Long_Long_Integer'Image(encryptedMessage));
 
-   Ada.Text_IO.New_Line;
    Ada.Text_IO.Put("decrypted message = ");
-   for I in 1 .. Ada.Strings.Unbounded.Length(message) loop
-      Ada.Text_IO.Put(Character'Val(decryptedMessageArr(I)));
-   end loop;
+   Ada.Text_IO.Put_Line(Long_Long_Integer'Image(decryptedMessage));
 
    null;
 end Main;

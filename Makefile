@@ -5,7 +5,7 @@ DEST = /usr/local/bin
 all: build clean
 
 build:
-	$(CC) $(PROG).adb -o $(NAME)
+	$(CC) $(PROG).adb -g -o $(NAME)
 clean:
 	rm -f *.ali *.o 
 install:
