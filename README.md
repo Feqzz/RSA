@@ -1,5 +1,5 @@
 # RSA
-RSA implementation in ADA.
+RSA implementation in ADA. It currently encrypts/decrypts each character in the message separately, which is not ideal.
 
 # Usage
 `./rsa p q e Message`
