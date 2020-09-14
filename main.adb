@@ -105,11 +105,11 @@ procedure Main is
    -- FastModularExponentiation --
    -------------------------------
 
-   function FastModularExponentiation (b, exp, m : Natural) return Integer
+   function FastModularExponentiation (b, exp, m : Long_Long_Integer) return Long_Long_Integer
    is
-      x : Integer := 1;
-      power : Integer;
-      str : String := DecimalToBinary (exp);
+      x : Long_Long_Integer := 1;
+      power : Long_Long_Integer;
+      str : String := DecimalToBinary (Integer(exp));
    begin
 
       power := b mod m;
@@ -120,6 +120,7 @@ procedure Main is
          end if;
 
          power := (power*power) mod m;
+         --power := FastModularExponentiation(power, power, m);
       end loop;
 
       return x;
@@ -132,7 +133,7 @@ procedure Main is
    function Encrypt (M, N, E : Long_Long_Integer) return Long_Long_Integer
    is
    begin
-      return Long_Long_Integer(FastModularExponentiation(Integer(M), Integer(E), Integer(N)));
+      return FastModularExponentiation(M, E, N);
    end Encrypt;
 
    -------------
@@ -142,7 +143,7 @@ procedure Main is
    function Decrypt (C, D, N : Long_Long_Integer) return Long_Long_Integer
    is
    begin
-      return Long_Long_Integer(FastModularExponentiation(Integer(C), Integer(D), Integer(N)));
+      return FastModularExponentiation(C, D, N);
    end Decrypt;
 
 begin
@@ -154,6 +155,28 @@ begin
 
    if Ada.Command_Line.Argument(1) = "--help" then
       Ada.Text_IO.Put_Line("Argument order: p, q, e, Message (String. Max 100 characters.)");
+      Ada.Text_IO.Put_Line("--encrypt n e message    :    Encrypts the message.");
+      Ada.Text_IO.Put_Line("--decrypt d n message    :    Decrypts the message.");
+      return;
+   end if;
+
+   if Ada.Command_Line.Argument(1) = "--encrypt" then
+      n := Long_Long_Integer'Value(Ada.Command_Line.Argument(2));
+      e := Long_Long_Integer'Value(Ada.Command_Line.Argument(3));
+      message := Long_Long_Integer'Value(Ada.Command_Line.Argument(4));
+      encryptedMessage := Encrypt(message, n, e);
+      Ada.Text_IO.Put("encrypted message = ");
+      Ada.Text_IO.Put_Line(Long_Long_Integer'Image(encryptedMessage));
+      return;
+   end if;
+
+   if Ada.Command_Line.Argument(1) = "--decrypt" then
+      d := Long_Long_Integer'Value(Ada.Command_Line.Argument(2));
+      n := Long_Long_Integer'Value(Ada.Command_Line.Argument(3));
+      encryptedMessage := Long_Long_Integer'Value(Ada.Command_Line.Argument(4));
+      decryptedMessage := Decrypt(message, d, n);
+      Ada.Text_IO.Put("decrypted message = ");
+      Ada.Text_IO.Put_Line(Long_Long_Integer'Image(decryptedMessage));
       return;
    end if;
 
