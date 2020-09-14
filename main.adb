@@ -153,14 +153,18 @@ begin
       return;
    end if;
 
-   if Ada.Command_Line.Argument(1) = "--help" then
-      Ada.Text_IO.Put_Line("Argument order: p, q, e, Message (String. Max 100 characters.)");
-      Ada.Text_IO.Put_Line("--encrypt n e message    :    Encrypts the message.");
-      Ada.Text_IO.Put_Line("--decrypt d n message    :    Decrypts the message.");
-      return;
-   end if;
+   	if Ada.Command_Line.Argument(1) = "--help" then
 
-   if Ada.Command_Line.Argument(1) = "--encrypt" then
+		Ada.Text_IO.Put_Line("A simple CLI RSA program.");
+   		Ada.Text_IO.New_Line;
+   		Ada.Text_IO.Put_Line("Usage: ");
+   		Ada.Text_IO.Put_Line("    rsa <p> <q> <e> <message>");
+   		Ada.Text_IO.Put_Line("    rsa encrypt <n> <e> <message>");
+   		Ada.Text_IO.Put_Line("    rsa decrypt <d> <n> <message>");
+      	return;
+   	end if;
+
+   if Ada.Command_Line.Argument(1) = "encrypt" then
       n := Long_Long_Integer'Value(Ada.Command_Line.Argument(2));
       e := Long_Long_Integer'Value(Ada.Command_Line.Argument(3));
       message := Long_Long_Integer'Value(Ada.Command_Line.Argument(4));
@@ -170,7 +174,7 @@ begin
       return;
    end if;
 
-   if Ada.Command_Line.Argument(1) = "--decrypt" then
+   if Ada.Command_Line.Argument(1) = "decrypt" then
       d := Long_Long_Integer'Value(Ada.Command_Line.Argument(2));
       n := Long_Long_Integer'Value(Ada.Command_Line.Argument(3));
       encryptedMessage := Long_Long_Integer'Value(Ada.Command_Line.Argument(4));
