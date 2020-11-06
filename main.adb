@@ -178,7 +178,7 @@ begin
       d := Long_Long_Integer'Value(Ada.Command_Line.Argument(2));
       n := Long_Long_Integer'Value(Ada.Command_Line.Argument(3));
       encryptedMessage := Long_Long_Integer'Value(Ada.Command_Line.Argument(4));
-      decryptedMessage := Decrypt(message, d, n);
+      decryptedMessage := Decrypt(encryptedMessage, d, n);
       Ada.Text_IO.Put("decrypted message = ");
       Ada.Text_IO.Put_Line(Long_Long_Integer'Image(decryptedMessage));
       return;
